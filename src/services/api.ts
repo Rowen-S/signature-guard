@@ -20,15 +20,17 @@ interface SignatureRecord {
   created_at: string;
 }
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export const api = {
   getNonce: async () => {
-    const res = await fetch("/api/sign/nonce");
+    const res = await fetch(`${API_URL}/sign/nonce`);
     const data = await res.json();
     return data.data;
   },
 
   verifySignature: async (params: SignVerifyRequest) => {
-    const res = await fetch("/api/sign/verify", {
+    const res = await fetch(`${API_URL}/sign/verify`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(params),
@@ -37,7 +39,7 @@ export const api = {
   },
 
   verifyEip712Signature: async (params: Eip712SignVerifyRequest) => {
-    const res = await fetch("/api/sign/verify-eip712", {
+    const res = await fetch(`${API_URL}/sign/verify-eip712`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(params),
@@ -45,7 +47,7 @@ export const api = {
     return res.json();
   },
   getSignatureRecords: async (userAddress: string) => {
-    const res = await fetch("/api/sign/list", {
+    const res = await fetch(`${API_URL}/sign/list`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
