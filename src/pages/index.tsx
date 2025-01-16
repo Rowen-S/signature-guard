@@ -5,6 +5,7 @@ import { useCallback, useState } from "react";
 import { useAccount, useSignMessage, useSignTypedData } from "wagmi";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "../services/api";
+import { v4 as uuidv4 } from "uuid";
 
 // 这些常量定义可以保持在组件外部
 const PROJECT_NAMES = [
@@ -55,7 +56,7 @@ const Home: NextPage = () => {
         return;
       }
 
-      const nonce = await api.getNonce();
+      const nonce = uuidv4();
       const message = `
 Welcome to Mantle ${actualProjectName}!
   
@@ -73,7 +74,7 @@ ${nonce}
       console.log("签名结果:", signature);
 
       await api.verifySignature({
-        project_name: actualProjectName,
+        project_name: projectName,
         service_type: serviceType,
         message,
         signature,
@@ -112,7 +113,7 @@ ${nonce}
         return;
       }
 
-      const nonce = await api.getNonce();
+      const nonce = uuidv4();
 
       // 添加 EIP-712 类型定义
       const DOMAIN = {
@@ -131,7 +132,7 @@ ${nonce}
       } as const;
 
       const message = {
-        projectName: actualProjectName,
+        projectName,
         serviceType,
         walletAddress: address as `0x${string}`,
         nonce,
@@ -306,7 +307,9 @@ ${nonce}
                   {signatureRecords?.map((record: any) => (
                     <tr key={record.id}>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        {record.project_name}
+                        {PROJECT_NAMES.find(
+                          (v) => v.value === record.project_name
+                        )?.label || ""}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {record.service_type}

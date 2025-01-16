@@ -23,11 +23,6 @@ interface SignatureRecord {
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const api = {
-  getNonce: async () => {
-    const res = await fetch(`${API_URL}/sign/nonce`);
-    const data = await res.json();
-    return data.data;
-  },
 
   verifySignature: async (params: SignVerifyRequest) => {
     const res = await fetch(`${API_URL}/sign/verify`, {
