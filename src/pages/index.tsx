@@ -57,8 +57,7 @@ const Home: NextPage = () => {
       }
 
       const nonce = uuidv4();
-      const message = `
-Welcome to Mantle ${actualProjectName}!
+      const message = `Welcome to Mantle ${actualProjectName}!
   
 By signing this message, you agree to the Mantle Terms of Service (https://www.mantle.xyz/terms) and Privacy Policy (https://www.mantle.xyz/privacy-policy).
 
@@ -67,6 +66,9 @@ ${address}
 
 Nonce:
 ${nonce}
+
+Timestamp:
+${Date.now()}
 `;
       const signature = await signMessageAsync({
         message,
@@ -127,6 +129,7 @@ ${nonce}
           { name: "projectName", type: "string" },
           { name: "serviceType", type: "string" },
           { name: "walletAddress", type: "address" },
+          { name: "timestamp", type: "string" },
           { name: "nonce", type: "string" },
         ],
       } as const;
@@ -135,6 +138,7 @@ ${nonce}
         projectName,
         serviceType,
         walletAddress: address as `0x${string}`,
+        timestamp: String(Date.now()),
         nonce,
       };
 
